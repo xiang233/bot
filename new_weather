@@ -1,0 +1,45 @@
+from flask import Flask, request, jsonify
+import pprint, requests
+
+app = Flask('app')
+CITY_LIST = []
+weather_api='f4ae90e2d9ebd6134141f4509741c3d8'
+
+@app.route('/')
+def home_page():
+  return 'Hello - Weather Bot!'
+
+
+def get_url(bot):
+  return f'http://store.ncss.cloud/melb/{bot}'
+
+def get_weather():
+  response_weather = request.get(get_url(weather))
+
+  if response_weather.ok:
+    return response_weather.json()
+  else:
+    return []
+
+
+@app.route('/weather', methods=['POST'])
+def weather():
+  data = request.get_json()
+  pprint.pprint(data)
+  main = weatherQuery['main']
+  textCont = data['text'].split()
+
+
+
+  
+  weatherResponse = requests.get('api.openweathermap.org/data/2.5/weather?q={city},AU&APPID={weather_api}&units=metric')
+  weatherQuery = weatherResponse.json()
+  
+  print(textCont)
+
+  
+  return jsonify({
+    'text': 'The weather today '
+  })
+
+app.run(debug = True, host='0.0.0.0', port=8080)
